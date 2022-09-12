@@ -9,12 +9,13 @@ from fast_bloge.user import router
 from fast_bloge.core.main import create_app
 # from fast_bloge.core.config import get_redis
 from fast_bloge.models.database import get_db, Base, engine
-
+from auth import autentication
 sentry_sdk.init("https://7fb35b23b1fb4521bab620e0eeeceebe@sentry.mybitmax.com/12")
 logger = logging.getLogger("uvicorn.error")
 
 app: FastAPI = create_app()
 app.include_router(router.router)
+app.include_router(autentication.router)
 Base.metadata.create_all(engine)
 
 @app.on_event("startup")

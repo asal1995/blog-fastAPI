@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 from starlette import status
-
+from auth.oauth2 import oath2_schema
 from fast_bloge.models.database import get_db
 from fast_bloge.user.schemas import UserCreate, UserBase, UpdateUser
 from fast_bloge.user import api
@@ -26,7 +26,7 @@ def get_user(id: int, db=Depends(get_db)):
 
 
 @router.post('/delete/{id}')
-def delete_user(id: int, db=Depends(get_db)):
+def delete_user(id: int, db=Depends(get_db), token: str = Depends(oath2_schema)):
     return api.delete_user(id, db)
 
 

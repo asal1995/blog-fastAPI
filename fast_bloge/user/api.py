@@ -1,7 +1,7 @@
 from sqlalchemy.orm.session import Session
 
 from fast_bloge.user.hash import Hash
-from fast_bloge.user.schemas import UserCreate
+from fast_bloge.user.schemas import UserCreate, UpdateUser
 from fast_bloge.user.models import User
 
 
@@ -36,13 +36,13 @@ def delete_user(id, db: Session):
     return 'ok'
 
 
-def update_user(id, db: Session, request: UserCreate):
+def update_user(id, db: Session, request: UpdateUser):
     user = db.query(User).filter(User.id == id)
     user.update({
         User.username: request.username,
-        # User.first_name: request.first_name,
     }
 
     )
     db.commit()
-    return ' ok'
+
+    return "ok"
