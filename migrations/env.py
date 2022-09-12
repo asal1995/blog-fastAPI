@@ -1,5 +1,5 @@
 import logging
-from fast_bloge.models.dbmodels import *
+from fast_bloge.models.database import *
 from fast_bloge.core.config import settings
 
 from logging.config import fileConfig
