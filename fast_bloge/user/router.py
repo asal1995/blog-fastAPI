@@ -1,11 +1,11 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
-from starlette import status
+
 from auth.oauth2 import oath2_schema
 from fast_bloge.models.database import get_db
-from fast_bloge.user.schemas import UserCreate, UserBase, UpdateUser
 from fast_bloge.user import api
+from fast_bloge.user.schemas import UserCreate, UserBase, UpdateUser
 
 router = APIRouter(prefix='/user', tags=['user'])
 
@@ -31,5 +31,7 @@ def delete_user(id: int, db=Depends(get_db), token: str = Depends(oath2_schema))
 
 
 @router.patch('/update/{id}')
-def get_user(id: int, user: UpdateUser, db=Depends(get_db)):
+def update_user(id: int, user: UpdateUser, db=Depends(get_db),token: str = Depends(oath2_schema)):
     return api.update_user(id, db, user)
+
+
