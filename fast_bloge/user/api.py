@@ -1,8 +1,9 @@
 from sqlalchemy.orm.session import Session
 
+from fast_bloge.models.database import rds
 from fast_bloge.user.hash import Hash
-from fast_bloge.user.schemas import UserCreate, UpdateUser
 from fast_bloge.user.models import User
+from fast_bloge.user.schemas import UserCreate, UpdateUser, BlockUser
 
 
 def create_user(db: Session, request: UserCreate):
@@ -44,5 +45,13 @@ def update_user(id, db: Session, request: UpdateUser):
 
     )
     db.commit()
+
+    return "ok"
+
+
+def block_user(db: Session, request: BlockUser):
+    user = db.query(User).filter(User.id == request.id).first()
+    if user:
+        rds.set(user.id, user.username)
 
     return "ok"

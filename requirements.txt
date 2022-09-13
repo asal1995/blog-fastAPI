@@ -1,1 +1,13 @@
 -r requirements-base.txt
+
+fastapi~=0.81.0
+pydantic~=1.9.2
+SQLAlchemy~=1.4.40
+pytest~=7.1.2
+starlette~=0.19.1
+alembic~=1.8.1
+setuptools~=65.3.0
+passlib~=1.7.4
+redis~=4.3.4
+uvicorn~=0.18.3
+celery~=5.2.7

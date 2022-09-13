@@ -1,4 +1,5 @@
-from typing import Optional, Union, List, Dict
+from typing import Union
+
 from pydantic import BaseModel
 
 
@@ -28,8 +29,11 @@ class UserBase(BaseModel):
 
 
 class UpdateUser(BaseModel):
-
     username: Union[str, None]
     first_name: Union[str, None]
     last_name: Union[str, None]
     email: Union[str, None]
+
+
+class BlockUser(BaseModel):
+    id : int

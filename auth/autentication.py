@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from auth import oauth2
 from fast_bloge.models.database import get_db
+from fast_bloge.models.database import rds
 from fast_bloge.user import models
 from fast_bloge.user.hash import Hash
 
@@ -18,6 +19,9 @@ def get_token(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depe
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='invalid credential')
     if not Hash.verify(user.hashed_password, request.password):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='invalid password')
+    block = rds.get(user.id)
+    if block:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='blocked user')
 
     access_token = oauth2.create_access_token(data={'sub': request.username})
     return {
