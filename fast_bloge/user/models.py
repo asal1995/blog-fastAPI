@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, String, Boolean, Integer , DateTime
+from sqlalchemy import Column, String, Boolean, Integer, DateTime
 
 from fast_bloge.models.database import Base
 
@@ -16,6 +16,15 @@ class User(Base):
     email = Column(String, unique=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
+    created_date = Column(DateTime, default=datetime.datetime.utcnow)
+
+
+class UserIP(Base):
+    __tablename__ = 'IP'
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String)
+    ip = Column(String)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
 
 

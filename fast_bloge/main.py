@@ -1,15 +1,18 @@
 import logging
 
-import uvicorn
-from fastapi import FastAPI
 import sentry_sdk
+import uvicorn
+from celery import Celery
+from fastapi import FastAPI
 
-from fast_bloge.user import router
+from auth import autentication
+from fast_bloge.core.config import settings
 # from models.database import Base, engine
 from fast_bloge.core.main import create_app
 # from fast_bloge.core.config import get_redis
-from fast_bloge.models.database import get_db, Base, engine
-from auth import autentication
+from fast_bloge.models.database import Base, engine
+from fast_bloge.user import router
+
 sentry_sdk.init("https://7fb35b23b1fb4521bab620e0eeeceebe@sentry.mybitmax.com/12")
 logger = logging.getLogger("uvicorn.error")
 
@@ -32,6 +35,12 @@ async def startup_event():
             continue
         my_logger.handlers[0].setFormatter(formatter)
 
+
+celery = Celery(
+    __name__,
+    broker=settings.redis_url,
+    backend=settings.redis_url,
+    include=['fast_bloge.tasks'])
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host="0.0.0.0", port=8002)

@@ -3,12 +3,12 @@ import logging
 from fastapi import APIRouter
 from sqlalchemy.exc import SQLAlchemyError
 
-from .sample import route as sample_route
 from fast_bloge import __version__
-from fast_bloge.models.database import get_conn
 from fast_bloge.core.errors import ok
+from fast_bloge.models.database import get_conn
+from .sample import route as sample_route
 
-logger=logging.getLogger('uvicorn.error')
+logger = logging.getLogger('uvicorn.error')
 route = APIRouter()
 route.include_router(sample_route, prefix="/sample", tags=['sample'])
 
