@@ -7,9 +7,7 @@ from fastapi import FastAPI
 
 from auth import autentication
 from fast_bloge.core.config import settings
-# from models.database import Base, engine
 from fast_bloge.core.main import create_app
-# from fast_bloge.core.config import get_redis
 from fast_bloge.models.database import Base, engine
 from fast_bloge.user import router
 
