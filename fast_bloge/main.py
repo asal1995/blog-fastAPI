@@ -5,17 +5,16 @@ import uvicorn
 from celery import Celery
 from fastapi import FastAPI
 
-from auth import autentication
+from fast_bloge.controller import autentication, sample
 from fast_bloge.core.config import settings
 from fast_bloge.core.main import create_app
 from fast_bloge.models.database import Base, engine
-from fast_bloge.user import router
 
 sentry_sdk.init("https://7fb35b23b1fb4521bab620e0eeeceebe@sentry.mybitmax.com/12")
 logger = logging.getLogger("uvicorn.error")
 
 app: FastAPI = create_app()
-app.include_router(router.router)
+app.include_router(sample.router)
 app.include_router(autentication.router)
 Base.metadata.create_all(engine)
 

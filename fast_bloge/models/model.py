@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, String, Boolean, Integer, DateTime
+from sqlalchemy import Boolean, Column, DateTime, Integer, String
 
 from fast_bloge.models.database import Base
 

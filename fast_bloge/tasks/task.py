@@ -1,8 +1,8 @@
 from fastapi import Depends
 
 from fast_bloge.models.database import get_db
+from fast_bloge.models.model import UserIP
 from fast_bloge.tasks.celery_worker import celery
-from fast_bloge.user.models import UserIP
 
 
 @celery.task()

@@ -1,15 +1,22 @@
 import enum
-from typing import Union, Optional
+from datetime import datetime, timedelta
 from functools import wraps
+from typing import Optional
+from typing import Union
 
-
-from fastapi import HTTPException, Depends
-from jose import jwt, JWTError, constants
+from fastapi import Depends
+from fastapi import HTTPException, Security
+from fastapi.security import OAuth2PasswordBearer
+from fastapi.security.api_key import APIKeyHeader
+from jose import JWTError, constants
+from jose import jwt
 from pydantic import BaseModel
 from starlette import status
 from starlette.requests import Request
+from starlette.status import HTTP_403_FORBIDDEN
 
-from .config import get_settings, Settings
+from fast_bloge.core.config import get_settings
+from .config import Settings
 
 role_exception = HTTPException(
     status_code=status.HTTP_403_FORBIDDEN,
@@ -82,3 +89,33 @@ def get_current_user(request: Request, settings: Settings = Depends(get_settings
         return Auth(user_id=payload['user_id'], kyc_level=payload['kyc_level'],
                     email=payload['email'], phone_number=payload['phone_number'], user_type=payload['user_type'])
     return None
+
+
+api_key_header = APIKeyHeader(name="X-service-key", auto_error=False)
+
+
+async def get_api_key(api_key_header: str = Security(api_key_header)):
+    if api_key_header == get_settings().api_key:
+        return api_key_header
+    else:
+        raise HTTPException(
+            status_code=HTTP_403_FORBIDDEN, detail="Could not validate API KEY"
+        )
+
+
+oath2_schema = OAuth2PasswordBearer(tokenUrl="token")
+
+SECRET_KEY = 'fe0b42c7207f0f15090293b0aa2a15be7f236c35901b962820d0979db88c7cac'
+ALGORITHM = 'HS256'
+ACCESS_TOKEN_EXPIRED_MINUTES = 30
+
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+        to_encode.update({"exp": expire})
+        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+        return encoded_jwt

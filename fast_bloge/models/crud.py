@@ -1,9 +1,9 @@
 from sqlalchemy.orm.session import Session
 
 from fast_bloge.models.database import rds
-from fast_bloge.user.hash import Hash
-from fast_bloge.user.models import User, UserIP
-from fast_bloge.user.schemas import UserCreate, UpdateUser, BlockUser
+from fast_bloge.models.model import User, UserIP
+from fast_bloge.models.schemas import BlockUser, UpdateUser, UserCreate
+from fast_bloge.services.hash import Hash
 
 
 def create_user(db: Session, request: UserCreate):
